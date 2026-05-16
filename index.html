@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>은행중학교 좌석배치 프로그램</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏫 은행중학교 좌석배치 프로그램</h1>
+            <p>우리 반 아이들의 자리를 클릭 한 번으로 공정하게 정해보세요!</p>
+        </header>
+
+        <div class="controls">
+            <div class="input-group">
+                <label for="student-names">학생 이름 (명렬표를 그대로 복사해서 붙여넣으세요. 쉼표나 띄어쓰기, 줄바꿈으로 구분됩니다.)</label>
+                <textarea id="student-names" rows="4" placeholder="김철수, 이영희, 홍길동..."></textarea>
+            </div>
+            <div class="config-group">
+                <label for="cols">분단 (가로 열):</label>
+                <input type="number" id="cols" value="4" min="2" max="10">
+                <label for="rows">줄 (세로 행):</label>
+                <input type="number" id="rows" value="5" min="2" max="10">
+            </div>
+            <button id="generate-btn">🎲 무작위 자리 배치하기</button>
+        </div>
+
+        <div class="classroom">
+            <div class="teacher-desk">교탁</div>
+            <div id="seating-grid" class="seating-grid">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
