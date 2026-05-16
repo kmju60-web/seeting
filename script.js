@@ -1,48 +1,142 @@
-// 버튼에 클릭 이벤트 연결
-document.getElementById('generate-btn').addEventListener('click', generateSeating);
+/* 전체 배경 및 폰트 설정 */
+body {
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+    background-color: #f0fdf4; /* 편안한 연두색 배경 */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin: 0;
+}
 
-function generateSeating() {
-    const namesInput = document.getElementById('student-names').value;
-    const cols = parseInt(document.getElementById('cols').value);
-    const rows = parseInt(document.getElementById('rows').value);
-    
-    // 입력된 텍스트에서 쉼표(,)나 줄바꿈, 띄어쓰기를 기준으로 이름을 분리하고 빈칸 제거
-    let students = namesInput.split(/[\n,\s]+/).map(name => name.trim()).filter(name => name.length > 0);
-    
-    const totalSeats = cols * rows;
-    
-    // 학생 수가 좌석 수보다 많은 경우 경고
-    if (students.length > totalSeats) {
-        alert(`입력한 학생 수(${students.length}명)가 준비된 좌석 수(${totalSeats}석)보다 많습니다! 분단이나 줄을 늘려주세요.`);
-        return;
-    }
+/* 메인 화면 컨테이너 */
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
 
-    // 학생 배열 무작위로 섞기 (Fisher-Yates 알고리즘)
-    for (let i = students.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [students[i], students[j]] = [students[j], students[i]];
-    }
+header h1 {
+    color: #166534;
+    margin-bottom: 10px;
+}
 
-    const grid = document.getElementById('seating-grid');
-    grid.innerHTML = ''; // 기존에 배치된 좌석 초기화
-    
-    // CSS Grid의 열(분단) 개수 설정
-    grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+header p {
+    color: #64748b;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
 
-    // 좌석(책상) 생성하여 화면에 추가
-    for (let i = 0; i < totalSeats; i++) {
-        const desk = document.createElement('div');
-        desk.classList.add('desk');
-        
-        if (i < students.length) {
-            // 학생이 있는 자리
-            desk.innerText = students[i];
-        } else {
-            // 학생 수가 모자라 남는 빈자리
-            desk.innerText = '빈자리';
-            desk.classList.add('empty-desk');
-        }
-        
-        grid.appendChild(desk);
-    }
+/* 설정 영역 스타일 */
+.controls {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+    border: 1px solid #e2e8f0;
+}
+
+.input-group, .config-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    resize: vertical;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.config-group input {
+    width: 60px;
+    padding: 8px;
+    margin-right: 20px;
+    text-align: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #22c55e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: #16a34a;
+}
+
+/* 교실 및 책상 영역 스타일 */
+.classroom {
+    border: 2px solid #e2e8f0;
+    padding: 30px 20px;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.seating-grid {
+    display: grid;
+    gap: 15px;
+    justify-content: center;
+}
+
+.teacher-desk {
+    width: 150px;
+    /* 기존 0 auto 40px auto 에서 교탁 위쪽에 40px 여백을 주도록 수정 */
+    margin: 40px auto 0 auto; 
+    padding: 12px;
+    background-color: #475569;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* 개별 학생 책상 */
+.desk {
+    background-color: #fef3c7; /* 따뜻한 나무색 */
+    border: 2px solid #f59e0b;
+    border-radius: 8px;
+    padding: 15px 5px;
+    min-width: 80px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    word-break: keep-all;
+}
+
+/* 남는 빈자리 */
+.empty-desk {
+    background-color: #f1f5f9;
+    border: 2px dashed #cbd5e1;
+    color: #94a3b8;
+    box-shadow: none;
 }
